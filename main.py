@@ -1,5 +1,5 @@
 ## File systemconfig
-
+# pip install termcolor
 # 1.1.1
 # 1.5
 # 3.1
@@ -45,7 +45,7 @@ def banner():
 def parse_args():
     import argparse
     parser = argparse.ArgumentParser(prog="python3 main.py")
-    parser.add_argument('--network',required=False,type=str,default=False)
+    parser.add_argument('--network',required=False,type=bool,default=False)
     parser.add_argument('--filesystem',required=False,type=str,default=False)
 
     # parser.add_argument('-u','--url',required=True,type=str,default=None)
@@ -57,7 +57,11 @@ def parse_args():
 def main():
     args = parse_args()
     network = args.network
-    print(network)
+    # print(network)
+    if network == True:
+        # print("here")
+        NetworkParameters.IPForwarding()
+    # print(network)
     # ip = args.IP
 # print(a)
 main()
