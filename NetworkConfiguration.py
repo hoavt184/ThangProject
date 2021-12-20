@@ -8,6 +8,7 @@ from termcolor import colored
 
 class NetworkParameters:
     def IPForwarding():
+        print("[*] IP Forwarding checking....")
         cmd = 'grep "net\.ipv4\.ip_forward" /etc/sysctl.conf /etc/sysctl.d/* && grep "net\.ipv6\.conf\.all\.forwarding" /etc/sysctl.conf /etc/sysctl.d/*'
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)
         # print("here")
@@ -25,9 +26,10 @@ class NetworkParameters:
             result = config.split('=')
             # print(config[1])
             if result[1] == '1':
-                print(colored("IP forwarding is enabled: "+config, 'yellow'))
-                print(colored("Recommendation: "+result[0]+"=0\n",'green'))
-
+                print(colored("   [*] IP forwarding is enabled: "+config, 'yellow'))
+                print(colored('''   [*] Recommendation: '''+result[0]+"=0\n",'green'))
+            else:
+                print(colored("Ensure IP forwarding is disabled", 'green'))
             
             
             # print(config)
@@ -55,16 +57,111 @@ class NetworkParameters:
         # print(list(x)[0])
         # print(output.decode('ascii'))
         return True
+    def PacketRedirectSending():
+        print("[*] Packet redirect sending checking....")
+
+        cmd = 'grep "net\.ipv4\.conf\.all\.send_redirects" /etc/sysctl.conf /etc/sysctl.d/* && grep "net\.ipv4\.conf\.default\.send_redirects" /etc/sysctl.conf /etc/sysctl.d/*'
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)
+        # print("here")
+        (output, err) = p.communicate()
+        # print(output)
+        # print(output.decode('utf-8'))
+        rules_pattern = r"(net\.ipv4\.conf\.all\.send_redirects = [0,1])|(net\.ipv4\.conf\.default\.send_redirects = [0,1])"
+        search_pattern = re.findall(rules_pattern, output.decode("ascii"))
+
+        # # tmp = list(set(search_pattern))
+        # print(list(set(search_pattern)))
+        current = [re.sub(r"['\(\),\[\]] ",'',str(x)) for x in list(set(search_pattern))]
+        # # configs = [sorted(x.split('=')) for x in current]
+        # # print(current)
+        # # configs[0]['net.ipv4.ip_forward']
+        for config in current:
+            # print(config)
+            result = config.split(' = ')
+            # print(result[1])
+            if result[1] == '1':
+                print(colored("     [*] Packet redirect sending is enabled: "+config, 'yellow'))
+                print(colored('''   [*] Recommendation: '''+result[0]+"=0\n",'green'))
+            else:
+                print(colored("   [*] Ensure packet redirect sending is disabled", 'green'))
+        # pass
 
 
 class TCPWrapper:
-    def __init__(self):
-        pass
+    # def __init__(self):
+    #     pass
+    def WrapperInstall():
+        print("[*] TCP Wrappers is  installed checking....")
 
+        cmd = 'dpkg -s tcpd'
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)
+        # print("here")
+        (output, err) = p.communicate()
+        # print(output)
+        # print(err)
+        rules_pattern = r"package 'tcpd' is not installed"
+        search_pattern = re.findall(rules_pattern, err.decode("ascii"))
+        if len(search_pattern) > 0:
+            print(colored("   [*] TCP Wrappers is not installed",'yellow'))
+            print(colored('''   [*] Recommendation: apt-get install tcpd''','green'))
+        else:
+            print(colored("   [*] TCP Wrappers is installed",'green'))
+    def HostDeny():
+        print("[*] Host deny configured checking....")
 
+        cmd = 'cat /etc/hosts.deny'
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)
+        # print("here")
+        (output, err) = p.communicate()
+        # print(output.decode('ascii'))
+        # print(err)
+        rules_pattern = r"ALL:ALL"
+        search_pattern = re.findall(rules_pattern, output.decode("ascii"))
+        # print(search_pattern)
+        if len(search_pattern) == 0:
+            print(colored("   [*] Ensure /etc/hosts.deny is not configured",'yellow'))
+            print(colored('''   [*] Recommendation: echo "ALL: ALL" >> /etc/hosts.deny''','green'))
+        else:
+            print(colored("   [*] Ensure /etc/hosts.deny is configured",'green'))
+
+    def PermissionHostAllow():
+        print("[*] Host allow configured checking....")
+
+        cmd = 'stat /etc/hosts.deny'
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)
+        # print("here")
+        (output, err) = p.communicate()
+        # print(output.decode('ascii'))
+        # print(err)
+        rules_pattern = r'Access: \(0644\/\-rw\-r\-\-r\-\-\)  Uid: \(    0\/    root\)   Gid: \(    0\/    root\)'
+        search_pattern = re.findall(rules_pattern, output.decode("ascii"))
+        # print(search_pattern)
+        if len(search_pattern) > 0:
+            print(colored("   [*] Ensure permissions on /etc/hosts.allow are configured ",'yellow'))
+        else:
+            print(colored("   [*] Ensure /etc/hosts.deny is configured",'green'))
+            print(colored('''   [*] Recommendation: chown root:root /etc/hosts.allow && chmod 644 /etc/hosts.allow''','green'))
+    def PermissionHostDeny():
+        print("[*] Host deny configured checking....")
+
+        cmd = 'stat /etc/hosts.allow'
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)
+        # print("here")
+        (output, err) = p.communicate()
+        # print(output.decode('ascii'))
+        # print(err)
+        rules_pattern = r'Access: \(0644\/\-rw\-r\-\-r\-\-\)  Uid: \(    0\/    root\)   Gid: \(    0\/    root\)'
+        search_pattern = re.findall(rules_pattern, output.decode("ascii"))
+        # print(search_pattern)
+        if len(search_pattern) > 0:
+            print(colored("   [*] Ensure permissions on /etc/hosts.deny are configured ",'green'))
+        else:
+            print(colored("   [*] Ensure /etc/hosts.deny are not configured",'yellow'))
+            print(colored('''   [*] Recommendation: chown root:root /etc/hosts.deny && chmod 644 /etc/hosts.deny''','green'))
 class UncommonNetworkProtocols:
     def __init__(self):
         pass
+    # def DCCP():
 
 class FirewallConfiguration:
     def __init__(self):

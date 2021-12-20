@@ -47,6 +47,7 @@ def parse_args():
     parser = argparse.ArgumentParser(prog="python3 main.py")
     parser.add_argument('--network',required=False,type=bool,default=False)
     parser.add_argument('--filesystem',required=False,type=str,default=False)
+    parser.add_argument('--accessconfig',required=False,type=bool,default=False)
 
     # parser.add_argument('-u','--url',required=True,type=str,default=None)
     # parser.add_argument('--proxy',required=False,type=str,default=None, help="Proxy URL, support HTTP proxies (Example: http://127.0.0.1:8080)")
@@ -57,10 +58,21 @@ def parse_args():
 def main():
     args = parse_args()
     network = args.network
+    accessconfig = args.accessconfig
     # print(network)
     if network == True:
         # print("here")
         NetworkParameters.IPForwarding()
+        NetworkParameters.PacketRedirectSending()
+        TCPWrapper.WrapperInstall()
+        TCPWrapper.HostDeny()
+        TCPWrapper.PermissionHostAllow()
+        TCPWrapper.PermissionHostDeny()
+    if accessconfig == True:
+        # ConfigureCron.CronDaemon()
+        # ConfigureCron.PermissionCrontab()
+        SystemFilePermissions.PermissionEtcPasswd()
+        SystemFilePermissions.PermissionEtcShadow()
     # print(network)
     # ip = args.IP
 # print(a)
