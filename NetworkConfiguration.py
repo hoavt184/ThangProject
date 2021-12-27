@@ -5,9 +5,31 @@
 import subprocess
 import re
 from termcolor import colored
+from tqdm import tqdm
+from time import sleep
 
 class NetworkParameters:
-    def IPForwarding():
+    def __init__(self):
+        # print([ m for m in dir(self) if not m.startswith('__')])
+        # print(len(self))
+        # print(dir(self))
+        for i in tqdm(range(0, 100), desc ="TCP Wrapper processing"):
+            sleep(.03)
+            
+
+        for method in [ m for m in dir(self) if not m.startswith('__')]:
+            # print(method)
+            eval("self."+method+"()")
+            sleep(1)
+
+            # print(method)
+        # self.PermissionHostDeny()
+        # sleep(.5)
+        # TCPWrapper.PermissionHostAllow()
+    #     pass
+    def __len__(self):
+        return len([ m for m in dir(self) if not m.startswith('__')])
+    def IPForwarding(self):
         print("[*] IP Forwarding checking....")
         cmd = 'grep "net\.ipv4\.ip_forward" /etc/sysctl.conf /etc/sysctl.d/* && grep "net\.ipv6\.conf\.all\.forwarding" /etc/sysctl.conf /etc/sysctl.d/*'
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)
@@ -57,7 +79,7 @@ class NetworkParameters:
         # print(list(x)[0])
         # print(output.decode('ascii'))
         return True
-    def PacketRedirectSending():
+    def PacketRedirectSending(self):
         print("[*] Packet redirect sending checking....")
 
         cmd = 'grep "net\.ipv4\.conf\.all\.send_redirects" /etc/sysctl.conf /etc/sysctl.d/* && grep "net\.ipv4\.conf\.default\.send_redirects" /etc/sysctl.conf /etc/sysctl.d/*'
@@ -88,10 +110,28 @@ class NetworkParameters:
 
 
 class TCPWrapper:
-    # def __init__(self):
+    def __init__(self):
+        # print([ m for m in dir(self) if not m.startswith('__')])
+        # print(len(self))
+        # print(dir(self))
+        for i in tqdm(range(0, 100), desc ="TCP Wrapper processing"):
+            sleep(.03)
+            
+
+        for method in [ m for m in dir(self) if not m.startswith('__')]:
+            # print(method)
+            eval("self."+method+"()")
+            sleep(1)
+
+            # print(method)
+        # self.PermissionHostDeny()
+        # sleep(.5)
+        # TCPWrapper.PermissionHostAllow()
     #     pass
-    def WrapperInstall():
-        print("[*] TCP Wrappers is  installed checking....")
+    def __len__(self):
+        return len([ m for m in dir(self) if not m.startswith('__')])
+    def WrapperInstall(self):
+        print("[*] TCP Wrappers is installed checking....")
 
         cmd = 'dpkg -s tcpd'
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)
@@ -106,7 +146,7 @@ class TCPWrapper:
             print(colored('''   [*] Recommendation: apt-get install tcpd''','green'))
         else:
             print(colored("   [*] TCP Wrappers is installed",'green'))
-    def HostDeny():
+    def HostDeny(self):
         print("[*] Host deny configured checking....")
 
         cmd = 'cat /etc/hosts.deny'
@@ -124,7 +164,7 @@ class TCPWrapper:
         else:
             print(colored("   [*] Ensure /etc/hosts.deny is configured",'green'))
 
-    def PermissionHostAllow():
+    def PermissionHostAllow(self):
         print("[*] Host allow configured checking....")
 
         cmd = 'stat /etc/hosts.deny'
@@ -141,7 +181,7 @@ class TCPWrapper:
         else:
             print(colored("   [*] Ensure /etc/hosts.deny is configured",'green'))
             print(colored('''   [*] Recommendation: chown root:root /etc/hosts.allow && chmod 644 /etc/hosts.allow''','green'))
-    def PermissionHostDeny():
+    def PermissionHostDeny(self):
         print("[*] Host deny configured checking....")
 
         cmd = 'stat /etc/hosts.allow'
@@ -158,6 +198,9 @@ class TCPWrapper:
         else:
             print(colored("   [*] Ensure /etc/hosts.deny are not configured",'yellow'))
             print(colored('''   [*] Recommendation: chown root:root /etc/hosts.deny && chmod 644 /etc/hosts.deny''','green'))
+
+    # def run():
+        
 class UncommonNetworkProtocols:
     def __init__(self):
         pass

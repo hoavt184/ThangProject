@@ -4,8 +4,8 @@ import subprocess
 import re
 from termcolor import colored
 class SystemFilePermissions:
-    def __init__(self):
-        pass
+    # def __init__(self):
+    #     pass
     def PermissionEtcPasswd():
         print("[*] Ensure permissions on /etc/passwd are configured checking....")
 

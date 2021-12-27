@@ -32,7 +32,7 @@ import subprocess
 #             print(output.decode('ascii'))
 #             return True
 from AccessConfiguration import *
-from InitialSetup import *
+# from InitialSetup import *
 from NetworkConfiguration import *
 from SystemMaintenance import *
 # a = FileSystemConfiguration.NetworkParameters()
@@ -46,8 +46,10 @@ def parse_args():
     import argparse
     parser = argparse.ArgumentParser(prog="python3 main.py")
     parser.add_argument('--network',required=False,type=bool,default=False)
-    parser.add_argument('--filesystem',required=False,type=str,default=False)
-    parser.add_argument('--accessconfig',required=False,type=bool,default=False)
+    parser.add_argument('--system',required=False,type=bool,default=False)
+    parser.add_argument('--access',required=False,type=bool,default=False)
+    parser.add_argument('--install',required=False,type=bool,default=True)
+
 
     # parser.add_argument('-u','--url',required=True,type=str,default=None)
     # parser.add_argument('--proxy',required=False,type=str,default=None, help="Proxy URL, support HTTP proxies (Example: http://127.0.0.1:8080)")
@@ -56,23 +58,40 @@ def parse_args():
     return parser.parse_args()
 
 def main():
+    
+    # from tqdm import tqdm
+    # from time import sleep
+    # for i in tqdm(range(0, 100), desc ="Text You Want"):
+    #     pass
+    #     # sleep(.1)
     args = parse_args()
     network = args.network
-    accessconfig = args.accessconfig
+    access = args.access
+    system = args.system
+    # if install == True:
+    #     pass
     # print(network)
     if network == True:
-        # print("here")
-        NetworkParameters.IPForwarding()
-        NetworkParameters.PacketRedirectSending()
-        TCPWrapper.WrapperInstall()
-        TCPWrapper.HostDeny()
-        TCPWrapper.PermissionHostAllow()
-        TCPWrapper.PermissionHostDeny()
-    if accessconfig == True:
-        # ConfigureCron.CronDaemon()
-        # ConfigureCron.PermissionCrontab()
-        SystemFilePermissions.PermissionEtcPasswd()
-        SystemFilePermissions.PermissionEtcShadow()
+        TCPWrapper()
+        NetworkParameters()
+    #     # print("here")
+    #     NetworkParameters.IPForwarding()
+    #     NetworkParameters.PacketRedirectSending()
+    #     TCPWrapper.WrapperInstall()
+    #     TCPWrapper.HostDeny()
+    #     TCPWrapper.PermissionHostAllow()
+    #     TCPWrapper.PermissionHostDeny()
+    # if access == True:
+    #     ConfigureCron.CronDaemon()
+    #     ConfigureCron.PermissionCrontab()
+        
+    if system == True:
+        pass
+        # print("Here")
+        # for i in tqdm(range(0, 100), desc ="Text You Want"):
+        #     sleep(.1)
+        #     SystemFilePermissions.PermissionEtcPasswd()
+        #     SystemFilePermissions.PermissionEtcShadow()
     # print(network)
     # ip = args.IP
 # print(a)
