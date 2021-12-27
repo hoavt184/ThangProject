@@ -1,10 +1,32 @@
 import subprocess
 import re
 from termcolor import colored
+from tqdm import tqdm
+from time import sleep
 class ConfigureCron:
+    def __init__(self):
+        # print([ m for m in dir(self) if not m.startswith('__')])
+        # print(len(self))
+        # print(dir(self))
+        for i in tqdm(range(0, 100), desc ="Configure Cron processing"):
+            sleep(.03)
+            
+
+        for method in [ m for m in dir(self) if not m.startswith('__')]:
+            # print(method)
+            eval("self."+method+"()")
+            sleep(1)
+
+            # print(method)
+        # self.PermissionHostDeny()
+        # sleep(.5)
+        # TCPWrapper.PermissionHostAllow()
+    #     pass
+    def __len__(self):
+        return len([ m for m in dir(self) if not m.startswith('__')])
     # def __init__(self):
     #     pass
-    def CronDaemon():
+    def CronDaemon(self):
         print("[*] Cron daemon checking....")
 
         cmd = 'systemctl is-enabled cron'
@@ -21,7 +43,7 @@ class ConfigureCron:
         else:
             print(colored("   [*] Cron daemon is not enabled",'yellow'))
             print(colored('''   [*] Recommendation:  systemctl enable cron''','green'))
-    def PermissionCrontab():
+    def PermissionCrontab(self):
         print("[*] Cron daemon checking....")
 
         cmd = 'stat /etc/crontab'

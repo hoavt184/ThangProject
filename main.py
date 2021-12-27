@@ -81,12 +81,14 @@ def main():
     #     TCPWrapper.HostDeny()
     #     TCPWrapper.PermissionHostAllow()
     #     TCPWrapper.PermissionHostDeny()
-    # if access == True:
+    if access == True:
+        ConfigureCron()
     #     ConfigureCron.CronDaemon()
     #     ConfigureCron.PermissionCrontab()
         
     if system == True:
-        pass
+        SystemFilePermissions()
+        # pass
         # print("Here")
         # for i in tqdm(range(0, 100), desc ="Text You Want"):
         #     sleep(.1)

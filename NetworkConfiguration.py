@@ -13,7 +13,7 @@ class NetworkParameters:
         # print([ m for m in dir(self) if not m.startswith('__')])
         # print(len(self))
         # print(dir(self))
-        for i in tqdm(range(0, 100), desc ="TCP Wrapper processing"):
+        for i in tqdm(range(0, 100), desc ="Network Parameters processing"):
             sleep(.03)
             
 
@@ -49,7 +49,7 @@ class NetworkParameters:
             # print(config[1])
             if result[1] == '1':
                 print(colored("   [*] IP forwarding is enabled: "+config, 'yellow'))
-                print(colored('''   [*] Recommendation: '''+result[0]+"=0\n",'green'))
+                print(colored('''   [*] Recommendation: '''+result[0]+"=0",'green'))
             else:
                 print(colored("Ensure IP forwarding is disabled", 'green'))
             
@@ -103,7 +103,7 @@ class NetworkParameters:
             # print(result[1])
             if result[1] == '1':
                 print(colored("     [*] Packet redirect sending is enabled: "+config, 'yellow'))
-                print(colored('''   [*] Recommendation: '''+result[0]+"=0\n",'green'))
+                print(colored('''   [*] Recommendation: '''+result[0]+"=0",'green'))
             else:
                 print(colored("   [*] Ensure packet redirect sending is disabled", 'green'))
         # pass

@@ -3,10 +3,32 @@
 import subprocess
 import re
 from termcolor import colored
+from tqdm import tqdm
+from time import sleep
 class SystemFilePermissions:
+    def __init__(self):
+        # print([ m for m in dir(self) if not m.startswith('__')])
+        # print(len(self))
+        # print(dir(self))
+        for i in tqdm(range(0, 100), desc ="System file permissions processing"):
+            sleep(.03)
+            
+
+        for method in [ m for m in dir(self) if not m.startswith('__')]:
+            # print(method)
+            eval("self."+method+"()")
+            sleep(1)
+
+            # print(method)
+        # self.PermissionHostDeny()
+        # sleep(.5)
+        # TCPWrapper.PermissionHostAllow()
+    #     pass
+    def __len__(self):
+        return len([ m for m in dir(self) if not m.startswith('__')])
     # def __init__(self):
     #     pass
-    def PermissionEtcPasswd():
+    def PermissionEtcPasswd(self):
         print("[*] Ensure permissions on /etc/passwd are configured checking....")
 
         cmd = 'stat /etc/passwd'
@@ -24,7 +46,7 @@ class SystemFilePermissions:
             print(colored("   [*] Ensure permissions on /etc/passwd are not configured",'yellow'))
             print(colored('''   [*] Recommendation:  chown root:root /etc/passwd && chmod 644 /etc/passwd''','green'))
 
-    def PermissionEtcShadow():
+    def PermissionEtcShadow(self):
         print("[*] Ensure permissions on /etc/shadow are configured checking....")
 
         cmd = 'stat /etc/shadow'
@@ -42,7 +64,7 @@ class SystemFilePermissions:
             print(colored("   [*] Ensure permissions on /etc/shadow are not configured",'yellow'))
             print(colored('''   [*] Recommendation: chown root:shadow /etc/shadow && chmod o-rwx,g-wx /etc/shadow''','green'))
 
-    def PermissionEtcGroup():
+    def PermissionEtcGroup(self):
         print("[*] Ensure permissions on /etc/group are configured checking....")
 
         cmd = 'stat /etc/group'
@@ -61,7 +83,7 @@ class SystemFilePermissions:
             print(colored('''   [*] Recommendation: chown root:root /etc/group && chmod 644 /etc/group''','green'))
 
 
-    def PermissionHostDeny():
+    def PermissionHostDeny(self):
         print("[*] Host deny configured checking....")
 
         cmd = 'stat /etc/hosts.allow'
